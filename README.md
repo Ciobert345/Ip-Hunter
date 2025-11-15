@@ -40,5 +40,9 @@ public static final String WEB_ROOT = "src";
     WEB_ROOT → cartella dei file web
 
 
+<img width="1350" height="646" alt="immagine" src="https://github.com/user-attachments/assets/90f70f79-324f-45dd-8e12-3fb7b9e76b05" />
+
+
+<img width="1829" height="1220" alt="immagine" src="https://github.com/user-attachments/assets/e3d7dc16-7699-498c-a188-ba14119c335a" />
 
 
