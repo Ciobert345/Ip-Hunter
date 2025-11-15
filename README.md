@@ -2,6 +2,8 @@
 
 **IP-Hunter** è un server Java che gestisce un quiz sugli indirizzi IP.  
 I giocatori si collegano tramite browser alla pagina *client* per rispondere alle domande, mentre la pagina *scoreboard* mostra la classifica aggiornata.
+
+
 <img width="866" height="404" alt="immagine" src="https://github.com/user-attachments/assets/c04df7fc-3072-4c16-84d3-7661079470de" />
 
 ---
