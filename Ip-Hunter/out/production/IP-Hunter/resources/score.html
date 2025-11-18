@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IP Hunter – Admin Panel</title>
+    <style>
+        :root {
+            --bg: #0f1115;
+            --surface: #161a20;
+            --muted: #232a34;
+            --text: #e6e8eb;
+            --text-muted: #aab3bd;
+            --brand: #3b82f6;
+            --brand-600: #2563eb;
+            --brand-700: #1d4ed8;
+            --success: #22c55e;
+            --danger: #ef4444;
+            --warn: #f59e0b;
+            --accent: #22d3a3;
+            --shadow: 0 10px 30px rgba(0,0,0,0.35);
+            --radius: 14px;
+        }
+        @media (prefers-color-scheme: dark) { :root { color-scheme: dark; } }
+        * { box-sizing: border-box; }
+        body {
+            font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+            background: radial-gradient(1200px 600px at 10% -10%, rgba(59,130,246,0.15), transparent 40%),
+            radial-gradient(1000px 500px at 110% 10%, rgba(34,211,163,0.12), transparent 40%),
+            var(--bg);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 24px;
+        }
+        .container {
+            background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)) var(--surface);
+            padding: 28px;
+            border-radius: var(--radius);
+            text-align: center;
+            box-shadow: var(--shadow);
+            max-width: 1000px;
+            width: 100%;
+            border: 1px solid rgba(255,255,255,0.06);
+            backdrop-filter: blur(6px);
+        }
+        h1 {
+            margin: 0 0 20px 0;
+            color: var(--brand);
+            font-size: 2.1rem;
+            letter-spacing: 0.3px;
+        }
+        .controls {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 22px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        button {
+            padding: 12px 18px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: border-color .2s, box-shadow .2s, transform .06s;
+            font-weight: 700;
+            border: 1px solid rgba(255,255,255,0.06);
+            color: #fff;
+        }
+        button:hover { transform: translateY(-1px); }
+        button:active { transform: translateY(0); }
+        .btn-start { background: linear-gradient(135deg, var(--success), #16a34a); box-shadow: 0 10px 20px rgba(34,197,94,0.25); }
+        .btn-stop { background: linear-gradient(135deg, var(--danger), #dc2626); box-shadow: 0 10px 20px rgba(239,68,68,0.25); }
+        .btn-reset { background: linear-gradient(135deg, var(--warn), #f59e0b); color: #1a1a1a; box-shadow: 0 10px 20px rgba(245,158,11,0.25); }
+        .status-panel {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+        .status-card {
+            background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)) var(--muted);
+            padding: 16px 18px;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,0.06);
+            text-align: center;
+        }
+        .status-card.active { background: linear-gradient(135deg, rgba(34,197,94,0.25), rgba(34,211,100,0.15)); border-color: rgba(34,197,94,0.35); }
+        .status-card.inactive { background: linear-gradient(135deg, rgba(239,68,68,0.25), rgba(245,158,11,0.15)); border-color: rgba(239,68,68,0.35); }
+        .status-label { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 6px; font-weight: 600; }
+        .status-value { font-size: 1.8rem; font-weight: 800; }
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 15px;
+            background: var(--muted);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        thead th {
+            background: linear-gradient(135deg, var(--brand), var(--brand-600));
+            color: #fff;
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.6px;
+            text-align: center;
+            padding: 12px;
+        }
+        tbody td {
+            background: #1b212a;
+            color: var(--text);
+            text-align: center;
+            padding: 12px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+        tbody tr:hover td { background: #202835; }
+        .no-data { padding: 30px; color: var(--text-muted); font-style: italic; background: transparent; border: none; }
+        .podium {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .podium-item {
+            background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)) var(--muted);
+            padding: 14px 18px;
+            border-radius: 14px;
+            min-width: 160px;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .podium-item:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0,0,0,0.25); }
+        .podium-item.first { background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%); color: #000; transform: scale(1.04); }
+        .podium-item.first:hover { transform: scale(1.06) translateY(-4px); }
+        .podium-item.second { background: linear-gradient(135deg, #c0c0c0 0%, #e8e8e8 100%); color: #000; }
+        .podium-item.third { background: linear-gradient(135deg, #cd7f32 0%, #e39d5f 100%); color: #000; }
+        .podium-rank { font-size: 1.8rem; font-weight: 900; }
+        .podium-name { font-size: 1.1rem; margin: 6px 0; font-weight: 700; }
+        .podium-score { font-size: 0.95rem; opacity: 0.9; }
+        .back-link { display: inline-block; margin-top: 20px; color: var(--brand); text-decoration: none; font-size: 1rem; font-weight: 600; }
+        .back-link:hover { text-decoration: underline; }
+        .live-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: var(--accent);
+            border-radius: 50%;
+            margin-right: 8px;
+            box-shadow: 0 0 10px rgba(34,211,163,0.6);
+            animation: blink 1.5s infinite;
+        }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+        .section-title { display: flex; align-items: center; justify-content: center; margin: 20px 0 10px 0; }
+        .refresh-info { font-size: 0.9rem; color: var(--text-muted); margin-top: 10px; }
+        @media (max-width: 520px) { h1 { font-size: 1.6rem; } .container { padding: 22px; } }
+        @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>🕵️‍♂️ IP Hunter - Admin Panel</h1>
+
+    <div class="status-panel">
+        <div id="status-game" class="status-card inactive">
+            <div class="status-label">Stato Partita</div>
+            <div class="status-value">⏸️ Ferma</div>
+        </div>
+        <div class="status-card">
+            <div class="status-label">Giocatori Totali</div>
+            <div class="status-value" id="total-players">0</div>
+        </div>
+        <div class="status-card">
+            <div class="status-label">Giocatori Attivi</div>
+            <div class="status-value" id="active-players">0</div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button class="btn-start" id="btn-start">▶️ Avvia Partita</button>
+        <button class="btn-stop" id="btn-stop">⏹️ Termina Partita</button>
+        <button class="btn-reset" id="btn-reset">🔄 Resetta Punteggi</button>
+    </div>
+
+    <div class="section-title">
+        <h2 style="margin: 0;">🏆 Podio Live</h2>
+    </div>
+    <div id="podium" class="podium" aria-live="polite">
+        <div class="no-data">Nessun punteggio ancora...</div>
+    </div>
+
+    <div class="section-title">
+        <h2 style="margin: 0;">📊 Classifica Completa</h2>
+    </div>
+    <table>
+        <thead>
+        <tr>
+            <th>Posizione</th>
+            <th>Utente</th>
+            <th>Punteggio</th>
+        </tr>
+        </thead>
+        <tbody id="score-table" aria-live="polite">
+        <tr><td colspan="3" class="no-data">Nessun dato disponibile</td></tr>
+        </tbody>
+    </table>
+
+    <div class="refresh-info">
+        <span class="live-indicator"></span>
+        Aggiornamento automatico ogni 2 secondi
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    (function() {
+        'use strict';
+
+        let previousScores = {};
+
+        function avviaPartita() {
+            if (confirm("Vuoi avviare la partita? I giocatori inizieranno a ricevere quiz!")) {
+                fetch("/api/admin/start")
+                    .then(r => r.json())
+                    .then(j => {
+                        alert(j.message);
+                        aggiorna();
+                    })
+                    .catch(err => {
+                        console.error("Errore:", err);
+                        alert("Errore nell'avvio della partita");
+                    });
+            }
+        }
+
+        function terminaPartita() {
+            if (confirm("Vuoi terminare la partita? I giocatori non potranno più rispondere.")) {
+                fetch("/api/admin/stop")
+                    .then(r => r.json())
+                    .then(j => {
+                        alert(j.message);
+                        aggiorna();
+                    })
+                    .catch(err => {
+                        console.error("Errore:", err);
+                        alert("Errore nella terminazione della partita");
+                    });
+            }
+        }
+
+        function resettaPunteggi() {
+            if (confirm("ATTENZIONE: Vuoi davvero resettare tutti i punteggi? Questa azione è irreversibile!")) {
+                fetch("/api/admin/reset")
+                    .then(r => r.json())
+                    .then(j => {
+                        alert(j.message);
+                        previousScores = {};
+                        aggiorna();
+                    })
+                    .catch(err => {
+                        console.error("Errore:", err);
+                        alert("Errore nel reset dei punteggi");
+                    });
+            }
+        }
+
+        function aggiorna() {
+            fetch("/api/scores")
+                .then(r => r.json())
+                .then(j => {
+                    // Aggiorna stato partita
+                    const statusCard = document.getElementById("status-game");
+                    const statusValue = statusCard.querySelector(".status-value");
+
+                    if (j.gameActive) {
+                        statusValue.textContent = "▶️ Attiva";
+                        statusCard.className = "status-card active";
+                    } else {
+                        statusValue.textContent = "⏸️ Ferma";
+                        statusCard.className = "status-card inactive";
+                    }
+
+                    // Aggiorna statistiche
+                    const scores = j.scores || {};
+                    document.getElementById("total-players").textContent = Object.keys(scores).length;
+                    document.getElementById("active-players").textContent = j.activeUsers || 0;
+
+                    // Converti in array e ordina
+                    const sortedScores = Object.entries(scores)
+                        .sort((a, b) => b[1] - a[1]);
+
+                    // Aggiorna podio (top 3)
+                    const podiumDiv = document.getElementById("podium");
+                    podiumDiv.innerHTML = "";
+
+                    if (sortedScores.length === 0) {
+                        podiumDiv.innerHTML = '<div class="no-data">Nessun punteggio ancora...</div>';
+                    } else {
+                        const medals = ['🥇', '🥈', '🥉'];
+                        const classes = ['first', 'second', 'third'];
+
+                        for (let i = 0; i < Math.min(3, sortedScores.length); i++) {
+                            const user = sortedScores[i][0];
+                            const score = sortedScores[i][1];
+                            const item = document.createElement("div");
+                            item.className = "podium-item " + classes[i];
+
+                            // Aggiungi animazione se il punteggio è aumentato
+                            const isNew = !previousScores[user] || previousScores[user] < score;
+                            if (isNew && previousScores[user] !== undefined) {
+                                item.style.animation = "pulse 0.5s";
+                            }
+
+                            item.innerHTML = "<div class='podium-rank'>" + medals[i] + "</div>" +
+                                "<div class='podium-name'>" + user + "</div>" +
+                                "<div class='podium-score'>" + score + " punti</div>";
+                            podiumDiv.appendChild(item);
+                        }
+                    }
+
+                    // Aggiorna tabella completa
+                    const tbody = document.getElementById("score-table");
+                    tbody.innerHTML = "";
+
+                    if (sortedScores.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="3" class="no-data">Nessun dato disponibile</td></tr>';
+                    } else {
+                        sortedScores.forEach(function(entry, index) {
+                            const user = entry[0];
+                            const score = entry[1];
+                            const tr = document.createElement("tr");
+
+                            // Evidenzia se il punteggio è aumentato
+                            const isNew = !previousScores[user] || previousScores[user] < score;
+                            if (isNew && previousScores[user] !== undefined) {
+                                tr.style.background = "#1a472a";
+                                setTimeout(() => {
+                                    tr.style.transition = "background 1s";
+                                    tr.style.background = "#2a2a2a";
+                                }, 100);
+                            }
+
+                            const tdPos = document.createElement("td");
+                            tdPos.textContent = (index + 1) + "°";
+
+                            const tdUser = document.createElement("td");
+                            tdUser.textContent = user;
+
+                            const tdScore = document.createElement("td");
+                            tdScore.textContent = score;
+                            tdScore.style.fontWeight = "bold";
+
+                            tr.appendChild(tdPos);
+                            tr.appendChild(tdUser);
+                            tr.appendChild(tdScore);
+                            tbody.appendChild(tr);
+                        });
+                    }
+
+                    // Salva punteggi correnti per il prossimo confronto
+                    previousScores = {...scores};
+                })
+                .catch(err => {
+                    console.error("Errore:", err);
+                });
+        }
+
+        // Event listeners
+        document.getElementById("btn-start").addEventListener("click", avviaPartita);
+        document.getElementById("btn-stop").addEventListener("click", terminaPartita);
+        document.getElementById("btn-reset").addEventListener("click", resettaPunteggi);
+
+        // Aggiornamento automatico ogni 2 secondi (tempo reale)
+        setInterval(aggiorna, 2000);
+
+        // Aggiornamento iniziale
+        aggiorna();
+    })();
+</script>
+</body>
+</html>
