@@ -16,7 +16,7 @@ public class GameServer {
     // In sviluppo tieni i file in src/resources; in jar saranno comunque nella classpath sotto /resources
     public static final String WEB_ROOT = "src/resources";
     public static final int PORT = 8090;
-    public static final int QUIZ_DURATION_SECONDS = 30; // Tempo per rispondere
+    public static final int QUIZ_DURATION_SECONDS = 100; // Tempo per rispondere
 
     // Mappa dei punteggi per utente
     public static Map<String, Integer> userScores = new HashMap<>();
@@ -438,3 +438,4 @@ public class GameServer {
         }
     }
 }
+
