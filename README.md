@@ -43,9 +43,9 @@ public static final String WEB_ROOT = "src";
 
 Images:
 
-<img width="1350" height="646" alt="immagine" src="https://github.com/user-attachments/assets/90f70f79-324f-45dd-8e12-3fb7b9e76b05" />
+<img width="1456" height="773" alt="immagine" src="https://github.com/user-attachments/assets/f84f8474-7167-4501-9b2e-f257278482ef" />
 
+<img width="1898" height="1288" alt="immagine" src="https://github.com/user-attachments/assets/248995e4-5bfe-476d-9aa9-289115f92819" />
 
-<img width="1829" height="1220" alt="immagine" src="https://github.com/user-attachments/assets/e3d7dc16-7699-498c-a188-ba14119c335a" />
 
 
