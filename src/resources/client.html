@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IP Hunter – Gioco</title>
+    <link rel="icon" type="image/svg+xml" href="client-favicon.svg">
     <style>
         :root {
             --bg: #0f1115;
@@ -11,25 +13,34 @@
             --muted: #232a34;
             --text: #e6e8eb;
             --text-muted: #aab3bd;
-            --brand: #3b82f6; /* blue-500 */
+            --brand: #3b82f6;
+            /* blue-500 */
             --brand-600: #2563eb;
             --brand-700: #1d4ed8;
-            --accent: #22d3a3; /* teal */
+            --accent: #22d3a3;
+            /* teal */
             --warn: #f59e0b;
             --danger: #ef4444;
-            --shadow: 0 10px 30px rgba(0,0,0,0.35);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
             --radius: 14px;
         }
+
         @media (prefers-color-scheme: dark) {
-            :root { color-scheme: dark; }
+            :root {
+                color-scheme: dark;
+            }
         }
-        * { box-sizing: border-box; }
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             margin: 0;
             font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
-            background: radial-gradient(1200px 600px at 10% -10%, rgba(59,130,246,0.15), transparent 40%),
-            radial-gradient(1000px 500px at 110% 10%, rgba(34,211,163,0.12), transparent 40%),
-            var(--bg);
+            background: radial-gradient(1200px 600px at 10% -10%, rgba(59, 130, 246, 0.15), transparent 40%),
+                radial-gradient(1000px 500px at 110% 10%, rgba(34, 211, 163, 0.12), transparent 40%),
+                var(--bg);
             color: var(--text);
             display: flex;
             justify-content: center;
@@ -37,30 +48,34 @@
             min-height: 100vh;
             padding: 24px;
         }
+
         .container {
             width: 90%;
             max-width: 720px;
-            background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)) var(--surface);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01)) var(--surface);
             padding: 28px;
             border-radius: var(--radius);
             text-align: center;
             box-shadow: var(--shadow);
-            border: 1px solid rgba(255,255,255,0.06);
+            border: 1px solid rgba(255, 255, 255, 0.06);
             backdrop-filter: blur(6px);
         }
+
         h1 {
             font-size: 2.1rem;
             margin: 0 0 18px 0;
             letter-spacing: 0.3px;
         }
+
         .value-box {
-            background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)) var(--muted);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01)) var(--muted);
             padding: 16px 18px 18px 18px;
             margin-bottom: 20px;
             border-radius: 10px;
             position: relative;
-            border: 1px solid rgba(255,255,255,0.06);
+            border: 1px solid rgba(255, 255, 255, 0.06);
         }
+
         .timer {
             position: absolute;
             top: 10px;
@@ -70,30 +85,77 @@
             border-radius: 999px;
             font-weight: 700;
             font-size: 1.05rem;
-            box-shadow: 0 6px 16px rgba(34,211,163,0.3);
+            box-shadow: 0 6px 16px rgba(34, 211, 163, 0.3);
         }
-        .timer.warning { background: linear-gradient(135deg, var(--warn), #ffb84d); animation: pulse 1s ease-in-out infinite; }
-        .timer.danger { background: linear-gradient(135deg, var(--danger), #ff6b6b); animation: pulse 0.55s ease-in-out infinite; }
-        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.06); } }
-        input, select, button {
+
+        .timer.warning {
+            background: linear-gradient(135deg, var(--warn), #ffb84d);
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        .timer.danger {
+            background: linear-gradient(135deg, var(--danger), #ff6b6b);
+            animation: pulse 0.55s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4);
+            }
+
+            70% {
+                transform: scale(1.05);
+                box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+            }
+
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -200% 0;
+            }
+
+            100% {
+                background-position: 200% 0;
+            }
+        }
+
+        input,
+        select,
+        button {
             width: 100%;
             padding: 12px 14px;
             margin-bottom: 14px;
             border-radius: 10px;
-            border: 1px solid rgba(255,255,255,0.08);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             font-size: 1rem;
             outline: none;
             transition: border-color .2s, box-shadow .2s, background .2s, transform .06s;
         }
-        input, select {
+
+        input,
+        select {
             background: #11161c;
             color: var(--text);
         }
-        input::placeholder, select:invalid { color: var(--text-muted); opacity: 0.9; }
-        input:focus, select:focus {
-            border-color: var(--brand);
-            box-shadow: 0 0 0 4px rgba(59,130,246,0.15);
+
+        input::placeholder,
+        select:invalid {
+            color: var(--text-muted);
+            opacity: 0.9;
         }
+
+        input:focus,
+        select:focus {
+            border-color: var(--brand);
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+        }
+
         button {
             background: linear-gradient(135deg, var(--brand), var(--brand-600));
             color: #fff;
@@ -101,22 +163,244 @@
             font-weight: 700;
             letter-spacing: .2px;
             border: none;
-            box-shadow: 0 10px 20px rgba(37,99,235,0.25);
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.25);
         }
-        button:hover { background: linear-gradient(135deg, var(--brand-600), var(--brand-700)); transform: translateY(-1px); }
-        button:active { transform: translateY(0); }
-        button:disabled { background: #39414d; color: #c0c6cf; cursor: not-allowed; box-shadow: none; }
-        .result { font-size: 1.1rem; font-weight: 700; margin-top: 10px; min-height: 1.5em; }
-        .warning-box {
-            background: linear-gradient(180deg, rgba(245,158,11,0.15), rgba(245,158,11,0.12));
-            color: #ffd89a;
-            padding: 14px 16px;
+
+        button:hover {
+            background: linear-gradient(135deg, var(--brand-600), var(--brand-700));
+            transform: translateY(-1px);
+        }
+
+        /* Sidebar & Overlay */
+        #sidebar {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 350px;
+            max-width: 85vw;
+            height: 100vh;
+            background: var(--surface);
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            border-left: 1px solid rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(10px);
+        }
+
+        #sidebar.open {
+            right: 0;
+        }
+
+        #sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(2px);
+            z-index: 999;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        #sidebar-overlay.visible {
+            display: block;
+            opacity: 1;
+        }
+
+        #sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        #sidebar-content {
+            padding: 20px;
+            overflow-y: auto;
+            flex: 1;
+            text-align: left;
+        }
+
+        .close-sidebar {
+            background: none !important;
+            border: none !important;
+            box-shadow: none !important;
+            padding: 5px !important;
+            width: auto !important;
+            color: var(--text-muted) !important;
+            cursor: pointer;
+            margin: 0 !important;
+        }
+
+        .close-sidebar:hover {
+            color: var(--text) !important;
+            transform: none !important;
+        }
+
+        .help-btn {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 60px !important;
+            height: 60px !important;
+            border-radius: 50% !important;
+            padding: 0 !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 900;
+            background: linear-gradient(135deg, var(--brand), var(--brand-600)) !important;
+            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.4) !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            outline: none;
+            border: none;
+        }
+
+        .help-btn:hover {
+            transform: scale(1.1) translateY(-2px);
+            box-shadow: 0 12px 28px rgba(59, 130, 246, 0.5) !important;
+        }
+
+        .help-btn svg {
+            width: 32px !important;
+            height: 32px !important;
+            display: block;
+            pointer-events: none;
+        }
+
+        .tutorial-section {
+            background: rgba(255, 255, 255, 0.03);
             border-radius: 10px;
-            margin-bottom: 18px;
-            font-weight: 700;
-            border: 1px solid rgba(245,158,11,0.25);
+            margin-bottom: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            overflow: hidden;
         }
-        .info { background: #203040; padding: 15px; border-radius: 10px; margin-bottom: 15px; }
+
+        .tutorial-header {
+            padding: 12px 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .tutorial-header h4 {
+            margin: 0;
+            font-size: 0.95rem;
+            color: var(--brand);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tutorial-body {
+            padding: 14px;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            color: var(--text-muted);
+            display: none;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .tutorial-section.open .tutorial-body {
+            display: block;
+        }
+
+        .tutorial-section.open .chevron {
+            transform: rotate(180deg);
+        }
+
+        .chevron {
+            transition: transform 0.3s;
+        }
+
+        .step {
+            margin-bottom: 12px;
+        }
+
+        .step-title {
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .example-box {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            border-radius: 6px;
+            border-left: 3px solid var(--brand);
+            margin-top: 8px;
+            font-family: monospace;
+        }
+
+        .difficulty-badge {
+            font-size: 0.65rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 800;
+            margin-left: auto;
+        }
+
+        .diff-easy {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+        }
+
+        .diff-medium {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+        }
+
+        .diff-hard {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            background: #39414d;
+            color: #c0c6cf;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .result {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-top: 10px;
+            min-height: 1.5em;
+        }
+
+        .warning-box {
+            background: rgba(245, 158, 11, 0.12);
+            color: #ffd89a;
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-weight: 700;
+            border: 1px solid rgba(245, 158, 11, 0.25);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info {
+            background: #203040;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
         .stats {
             display: flex;
             gap: 12px;
@@ -124,15 +408,27 @@
             margin-bottom: 16px;
             flex-wrap: wrap;
         }
+
         .stat-item {
-            background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)) var(--muted);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01)) var(--muted);
             padding: 10px 16px;
             border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.06);
+            border: 1px solid rgba(255, 255, 255, 0.06);
             min-width: 160px;
         }
-        .stat-item div:first-child { color: var(--text-muted); font-weight: 600; font-size: 0.9rem; }
-        .stat-value { font-size: 1.6rem; font-weight: 800; color: var(--brand); }
+
+        .stat-item div:first-child {
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .stat-value {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--brand);
+        }
+
         .progress-bar {
             width: 100%;
             height: 10px;
@@ -140,381 +436,660 @@
             border-radius: 999px;
             overflow: hidden;
             margin-bottom: 18px;
-            border: 1px solid rgba(255,255,255,0.06);
+            border: 1px solid rgba(255, 255, 255, 0.06);
         }
+
         .progress-fill {
             height: 100%;
             background: linear-gradient(90deg, var(--brand), var(--accent));
             transition: width 0.3s ease;
         }
+
         @media (max-width: 420px) {
-            .container { padding: 22px; }
-            h1 { font-size: 1.8rem; }
+            .container {
+                padding: 22px;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
         }
+
         @media (prefers-reduced-motion: reduce) {
-            * { transition: none !important; animation: none !important; }
+            * {
+                transition: none !important;
+                animation: none !important;
+            }
         }
     </style>
 </head>
+
 <body>
-<div class="container">
-    <h1>
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle; margin-right: 8px;">
-            <circle cx="11" cy="11" r="8"></circle>
-            <path d="m21 21-4.35-4.35"></path>
-        </svg>
-        IP Hunter
-    </h1>
-
-    <div id="game-status" class="warning-box" style="display:none;">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle; margin-right: 6px;">
-            <rect x="6" y="4" width="4" height="16"></rect>
-            <rect x="14" y="4" width="4" height="16"></rect>
-        </svg>
-        La partita non è ancora iniziata. Attendi l'admin!
-    </div>
-
-    <div class="stats">
-        <div class="stat-item">
-            <div>Il tuo punteggio</div>
-            <div class="stat-value" id="personal-score">0</div>
-        </div>
-        <div class="stat-item">
-            <div>Quiz completati</div>
-            <div class="stat-value" id="quiz-count">0</div>
-        </div>
-    </div>
-
-    <input type="text" id="username" placeholder="Il tuo nome (obbligatorio)">
-
-    <div id="quiz-container" style="display:none;">
-        <p><b>Indovina la classe, la rete e il broadcast dell'indirizzo mostrato:</b></p>
-
-        <div class="value-box">
-            <div class="timer" id="timer">30s</div>
-            <div><b>IP:</b> <span id="ip">-</span></div>
-            <div><b>Mask:</b> <span id="mask">-</span></div>
-        </div>
-
-        <div class="progress-bar" aria-label="Tempo rimanente">
-            <div class="progress-fill" id="progress"></div>
-        </div>
-
-        <select id="classe">
-            <option value="">Seleziona Classe IP</option>
-            <option value="A">Classe A </option>
-            <option value="B">Classe B </option>
-            <option value="C">Classe C </option>
-        </select>
-
-        <input type="text" id="rete" placeholder="Indirizzo di rete (es: 192.168.1.0)">
-        <input type="text" id="broadcast" placeholder="Broadcast (es: 192.168.1.255)">
-
-        <button id="check-btn" onclick="controlla()">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="vertical-align: middle; margin-right: 6px;">
-                <polyline points="20 6 9 17 4 12"></polyline>
+    <div class="container">
+        <h1>
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                style="vertical-align: middle; margin-right: 8px;">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.35-4.35"></path>
             </svg>
-            Controlla Risposta
-        </button>
+            IP Hunter
+        </h1>
 
-        <div class="result" id="result" aria-live="polite"></div>
+
+        <div id="game-status" class="warning-box" style="display:none;">
+            <div style="display: flex; align-items: center; gap: 14px; text-align: left;">
+                <div style="flex-shrink: 0; background: rgba(245, 158, 11, 0.15); padding: 8px; border-radius: 10px;">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        style="display: block; color: var(--warn);">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                        <path d="M12 8v4"></path>
+                        <path d="M12 16h.01"></path>
+                    </svg>
+                </div>
+                <div style="flex: 1;">
+                    <div style="font-size: 1.05rem; font-weight: 800; color: #fff; margin-bottom: 2px;">
+                        In attesa dell'Admin
+                    </div>
+                    <p style="margin: 0; font-size: 0.85rem; opacity: 0.85; line-height: 1.4; color: #ffd89a;">La
+                        partita non è ancora iniziata. Sfoglia la guida mentre aspetti.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats">
+            <div class="stat-item">
+                <div>Il tuo punteggio</div>
+                <div class="stat-value" id="personal-score">0</div>
+            </div>
+            <div class="stat-item">
+                <div>Quiz completati</div>
+                <div class="stat-value" id="quiz-count">0</div>
+            </div>
+        </div>
+
+        <input type="text" id="username" placeholder="Il tuo nome (obbligatorio)">
+
+        <div id="quiz-container" style="display:none;">
+            <p><b>Indovina la classe, la rete e il broadcast dell'indirizzo mostrato:</b></p>
+
+            <div class="value-box">
+                <div class="timer" id="timer">30s</div>
+                <div><b>IP:</b> <span id="ip">-</span></div>
+                <div><b>Mask:</b> <span id="mask">-</span></div>
+            </div>
+
+            <div class="progress-bar" aria-label="Tempo rimanente">
+                <div class="progress-fill" id="progress"></div>
+            </div>
+
+            <select id="classe">
+                <option value="">Seleziona Classe IP</option>
+                <option value="A">Classe A </option>
+                <option value="B">Classe B </option>
+                <option value="C">Classe C </option>
+            </select>
+
+            <input type="text" id="rete" placeholder="Indirizzo di rete (es: 192.168.1.0)">
+            <input type="text" id="broadcast" placeholder="Broadcast (es: 192.168.1.255)">
+
+            <button id="check-btn" onclick="controlla()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                    style="vertical-align: middle; margin-right: 6px;">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Controlla Risposta
+            </button>
+
+            <div class="result" id="result" aria-live="polite"></div>
+        </div>
+
+        <button id="start-btn" onclick="iniziaGioco()" style="display:none;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                style="vertical-align: middle; margin-right: 6px;">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polygon points="10 8 16 12 10 16 10 8" fill="currentColor"></polygon>
+            </svg>
+            Inizia a Giocare!
+        </button>
     </div>
 
-    <button id="start-btn" onclick="iniziaGioco()" style="display:none;">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle; margin-right: 6px;">
+    <!-- Help Button -->
+    <button class="help-btn" onclick="openSidebar()" title="Guida al Subnetting">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
             <circle cx="12" cy="12" r="10"></circle>
-            <polygon points="10 8 16 12 10 16 10 8" fill="currentColor"></polygon>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
         </svg>
-        Inizia a Giocare!
     </button>
-</div>
 
-<script>
-    let currentUsername = "";
-    let gameActive = false;
-    let currentQuizId = "";
-    let timeLeft = 0;
-    let timerInterval = null;
-    let quizCount = 0;
-    let timeLimit = 30;
-    let lastResetTimestamp = 0;
-    let isPlayingQuiz = false;
+    <!-- Sidebar Overlay -->
+    <div id="sidebar-overlay" onclick="closeSidebar()"></div>
 
-    setInterval(checkGameStatus, 3000);
+    <!-- Sidebar -->
+    <div id="sidebar">
+        <div id="sidebar-header">
+            <h3 style="margin:0; color: var(--brand); display: flex; align-items: center; gap: 10px;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                </svg>
+                Manuale IP Hunter
+            </h3>
+            <button class="close-sidebar" onclick="closeSidebar()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        <div id="sidebar-content">
+            <!-- Come Giocare -->
+            <div class="tutorial-section open">
+                <div class="tutorial-header" onclick="toggleSection(this)">
+                    <h4>Come Giocare</h4>
+                    <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </div>
+                <div class="tutorial-body">
+                    <ol style="padding-left: 20px;">
+                        <li>Inserisci il tuo nome e clicca <strong>Inizia a Giocare</strong>.</li>
+                        <li>Osserva l'<strong>IP</strong> e la <strong>Mask</strong> che appaiono nel box.</li>
+                        <li>Identifica la <strong>Classe</strong>, l'indirizzo di <strong>Rete</strong> e quello di
+                            <strong>Broadcast</strong>.
+                        </li>
+                        <li>Hai poco tempo! Più sei veloce, più punti accumuli.</li>
+                    </ol>
+                </div>
+            </div>
 
-    function checkGameStatus() {
-        fetch("/api/status")
-            .then(r => r.json())
-            .then(j => {
-                gameActive = j.gameActive;
+            <!-- Introduzione -->
+            <div class="tutorial-section">
+                <div class="tutorial-header" onclick="toggleSection(this)">
+                    <h4>1. Concetti Fondamentali</h4>
+                    <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </div>
+                <div class="tutorial-body">
+                    <p>Per dominare il subnetting devi conoscere 3 elementi:</p>
+                    <ul style="padding-left: 20px; margin-bottom: 10px;">
+                        <li><strong>Indirizzo IP:</strong> L'identità della macchina (es. <code>192.168.1.15</code>).
+                        </li>
+                        <li><strong>Subnet Mask:</strong> Decide quanto è grande la rete (es.
+                            <code>255.255.255.0</code>).
+                        </li>
+                        <li><strong>Indirizzo di Rete:</strong> Il "nome" della via. (Tutti i bit host a
+                            <strong>0</strong>).
+                        </li>
+                        <li><strong>Broadcast:</strong> L'indirizzo per "urlare" a tutti. (Tutti i bit host a
+                            <strong>1</strong>).
+                        </li>
+                    </ul>
+                    <p>Il segreto è capire dove finisce la <strong>Rete</strong> e dove iniziano gli
+                        <strong>Host</strong>.
+                    </p>
+                </div>
+            </div>
 
-                // Controlla se c'è stato un reset
-                if (j.resetTimestamp && j.resetTimestamp > lastResetTimestamp && lastResetTimestamp > 0) {
-                    resetClientState();
-                }
-                lastResetTimestamp = j.resetTimestamp || 0;
+            <!-- Classi IP -->
+            <div class="tutorial-section">
+                <div class="tutorial-header" onclick="toggleSection(this)">
+                    <h4>2. Le Classi (Standard)</h4>
+                    <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </div>
+                <div class="tutorial-body">
+                    <p>Guarda sempre il <strong>1° ottetto</strong> (il primo numero):</p>
+                    <table style="width:100%; font-size: 0.8rem; border-collapse: collapse; margin-top: 10px;">
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                            <th style="padding: 5px; text-align: left;">Classe</th>
+                            <th style="padding: 5px; text-align: left;">Range</th>
+                            <th style="padding: 5px; text-align: left;">Mask Default</th>
+                        </tr>
+                        <tr>
+                            <td style="padding: 5px;"><strong>A</strong></td>
+                            <td style="padding: 5px;">0 - 127</td>
+                            <td style="padding: 5px;">255.0.0.0 (/8)</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 5px;"><strong>B</strong></td>
+                            <td style="padding: 5px;">128 - 191</td>
+                            <td style="padding: 5px;">255.255.0.0 (/16)</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 5px;"><strong>C</strong></td>
+                            <td style="padding: 5px;">192 - 223</td>
+                            <td style="padding: 5px;">255.255.255.0 (/24)</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
 
-                updateUI();
-            })
-            .catch(err => console.error("Errore controllo stato:", err));
-    }
+            <!-- La Formula Magica -->
+            <div class="tutorial-section">
+                <div class="tutorial-header" onclick="toggleSection(this)">
+                    <h4>3. La "Formula Magica"</h4>
+                    <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </div>
+                <div class="tutorial-body">
+                    <p>Quando la maschera non è "piena" (non è 0 o 255), trova il <strong>numero magico</strong> (il
+                        Salto):</p>
+                    <div class="example-box"
+                        style="text-align: center; border-left: none; border-top: 3px solid var(--brand);">
+                        <strong>256 - Valore Maschera = Salto</strong>
+                    </div>
+                    <p style="margin-top: 10px;">Esempio: Se la maschera è <code>255.255.255.224</code>, il salto è
+                        <code>256 - 224 = 32</code>.<br>
+                        Le reti saranno multipli di 32: 0, 32, 64, 96...
+                    </p>
+                </div>
+            </div>
 
-    function resetClientState() {
-        // Reset completo dello stato del client
-        document.getElementById("personal-score").textContent = "0";
-        document.getElementById("quiz-count").textContent = "0";
-        quizCount = 0;
-        stopTimer();
-        isPlayingQuiz = false;
+            <!-- Esempio Medio -->
+            <div class="tutorial-section">
+                <div class="tutorial-header" onclick="toggleSection(this)">
+                    <h4>4. Esempio Guidato (Medio)</h4>
+                    <span class="difficulty-badge diff-medium">GUIDA</span>
+                    <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </div>
+                <div class="tutorial-body">
+                    <p>IP: <code>192.168.1.45</code> | Mask: <code>255.255.255.240</code></p>
+                    <div class="step">
+                        <span class="step-title">1. Calcola il Salto</span>
+                        <code>256 - 240 = 16</code>. Le reti saltano di 16.
+                    </div>
+                    <div class="step">
+                        <span class="step-title">2. Trova la Rete</span>
+                        Multipli di 16: 0, 16, 32, 48... <br>
+                        Il nostro .45 sta tra <strong>32</strong> e 48. La rete è <strong>32</strong>.<br>
+                        <strong>Rete:</strong> <code>192.168.1.32</code>
+                    </div>
+                    <div class="step">
+                        <span class="step-title">3. Trova il Broadcast</span>
+                        È l'ultimo numero prima della rete success (48).<br>
+                        <code>48 - 1 = 47</code>.<br>
+                        <strong>Broadcast:</strong> <code>192.168.1.47</code>
+                    </div>
+                </div>
+            </div>
 
-        if (gameActive && currentUsername) {
-            // Se la partita è ancora attiva, ricarica un quiz dopo un attimo
-            setTimeout(() => {
-                caricaNuovoQuiz();
-            }, 500);
+            <!-- Esempio Difficile -->
+            <div class="tutorial-section">
+                <div class="tutorial-header" onclick="toggleSection(this)">
+                    <h4>5. Esempio Elite (Multi-Ottetto)</h4>
+                    <span class="difficulty-badge diff-hard">ELITE</span>
+                    <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </div>
+                <div class="tutorial-body">
+                    <p>IP: <code>10.35.10.5</code> | Mask: <code>255.240.0.0</code> (/12)</p>
+                    <div class="step">
+                        <span class="step-title">1. Trova l'Ottetto Critico</span>
+                        La maschera è <code>240</code> al 2° ottetto. Salto: <code>256 - 240 = 16</code>.
+                    </div>
+                    <div class="step">
+                        <span class="step-title">2. Trova la Rete</span>
+                        Multipli di 16 nel 2° ottetto: 0, 16, 32, 48... <br>
+                        Il nostro <code>.35</code> sta dopo <code>.32</code>. <br>
+                        Azzera tutto ciò che segue!<br>
+                        <strong>Rete:</strong> <code>10.32.0.0</code>
+                    </div>
+                    <div class="step">
+                        <span class="step-title">3. Trova il Broadcast</span>
+                        Rete successiva: <code>10.48.0.0</code>. Togli 1.<br>
+                        <strong>Broadcast:</strong> <code>10.47.255.255</code>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bonus Cheat Sheet -->
+            <div class="tutorial-section">
+                <div class="tutorial-header" onclick="toggleSection(this)">
+                    <h4>6. Glossario Rapido</h4>
+                    <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </div>
+                <div class="tutorial-body">
+                    <p><strong>CIDR (/xx):</strong> Indica quanti bit "1" ci sono nella maschera. (/24 = 255.255.255.0).
+                    </p>
+                    <p><strong>Ottetto:</strong> Uno dei 4 numeri dell'IP (0-255).</p>
+                    <p><strong>Trucco Broadcast:</strong> Se la rete è <code>.0</code> e il salto è <code>64</code>, il
+                        broadcast è <code>.63</code>.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <script>
+        let currentUsername = "";
+        let gameActive = false;
+        let currentQuizId = "";
+        let timeLeft = 0;
+        let timerInterval = null;
+        let quizCount = 0;
+        let timeLimit = 30;
+        let lastResetTimestamp = 0;
+        let isPlayingQuiz = false;
+
+        // Gestione Sidebar
+        function openSidebar() {
+            if (gameActive && currentUsername) {
+                alert("Non puoi consultare il manuale durante la partita!");
+                return;
+            }
+            document.getElementById("sidebar").classList.add("open");
+            document.getElementById("sidebar-overlay").classList.add("visible");
         }
-    }
 
-    function updateUI() {
-        const statusDiv = document.getElementById("game-status");
-        const startBtn = document.getElementById("start-btn");
-        const quizContainer = document.getElementById("quiz-container");
-        const usernameInput = document.getElementById("username");
-        const username = usernameInput.value.trim();
+        function closeSidebar() {
+            document.getElementById("sidebar").classList.remove("open");
+            document.getElementById("sidebar-overlay").classList.remove("visible");
+        }
 
-        if (!gameActive) {
-            statusDiv.style.display = "block";
-            quizContainer.style.display = "none";
-            startBtn.style.display = "none";
+        function toggleSection(header) {
+            header.parentElement.classList.toggle("open");
+        }
+
+        setInterval(checkGameStatus, 3000); // Polling ogni 3s per stato partita
+
+        function checkGameStatus() {
+            fetch("/api/status") // API: verifica se partita è attiva
+                .then(r => r.json())
+                .then(j => {
+                    gameActive = j.gameActive;
+
+                    // Controlla se c'è stato un reset
+                    if (j.resetTimestamp && j.resetTimestamp > lastResetTimestamp && lastResetTimestamp > 0) { // Rileva reset punteggi dall'admin
+                        resetClientState();
+                    }
+                    lastResetTimestamp = j.resetTimestamp || 0;
+
+                    updateUI();
+                })
+                .catch(err => console.error("Errore controllo stato:", err));
+        }
+
+        function resetClientState() {
+            // Reset completo dello stato del client
+            document.getElementById("personal-score").textContent = "0";
+            document.getElementById("quiz-count").textContent = "0";
+            quizCount = 0;
             stopTimer();
             isPlayingQuiz = false;
 
-            // Se aveva già iniziato a giocare, resetta lo stato
-            if (currentUsername) {
-                currentUsername = "";
-                usernameInput.style.display = "block";
-                usernameInput.disabled = false;
-                usernameInput.value = "";
+            if (gameActive && currentUsername) {
+                // Se la partita è ancora attiva, ricarica un quiz dopo un attimo
+                setTimeout(() => {
+                    caricaNuovoQuiz();
+                }, 500);
             }
-        } else if (username && !currentUsername) {
-            // Partita attiva e utente ha inserito il nome ma non ha ancora iniziato
-            statusDiv.style.display = "none";
-            startBtn.style.display = "block";
-            quizContainer.style.display = "none";
-        } else if (currentUsername) {
-            // Utente sta già giocando
-            statusDiv.style.display = "none";
-            startBtn.style.display = "none";
-            quizContainer.style.display = "block";
-        }
-    }
-
-    function iniziaGioco() {
-        const username = document.getElementById("username").value.trim();
-        if (!username) {
-            alert("Inserisci il tuo nome prima di iniziare!");
-            return;
         }
 
-        if (!gameActive) {
-            alert("La partita non è ancora iniziata! Attendi l'admin.");
-            return;
-        }
+        function updateUI() {
+            const statusDiv = document.getElementById("game-status");
+            const startBtn = document.getElementById("start-btn");
+            const quizContainer = document.getElementById("quiz-container");
+            const usernameInput = document.getElementById("username");
+            const helpBtn = document.querySelector(".help-btn");
+            const username = usernameInput.value.trim();
 
-        currentUsername = username;
-
-        // Nascondi campo nome e bottone inizia
-        document.getElementById("username").style.display = "none";
-        document.getElementById("start-btn").style.display = "none";
-
-        // Mostra container del quiz
-        document.getElementById("quiz-container").style.display = "block";
-
-        caricaNuovoQuiz();
-    }
-
-    function caricaNuovoQuiz() {
-        if (!gameActive) {
-            alert("La partita è terminata!");
-            return;
-        }
-
-        if (isPlayingQuiz) {
-            return; // Non caricare un nuovo quiz se ce n'è già uno in corso
-        }
-
-        isPlayingQuiz = true;
-
-        fetch(`/api/new?user=${encodeURIComponent(currentUsername)}`)
-            .then(r => r.json())
-            .then(j => {
-                if (j.error) {
-                    alert(j.error);
-                    isPlayingQuiz = false;
-                    return;
-                }
-
-                currentQuizId = j.quizId;
-                timeLimit = j.timeLimit || 30;
-                timeLeft = timeLimit;
-
-                document.getElementById("ip").textContent = j.ip;
-                document.getElementById("mask").textContent = j.mask;
-                document.getElementById("result").textContent = "";
-
-                // Reset campi
-                document.getElementById("classe").value = "";
-                document.getElementById("rete").value = "";
-                document.getElementById("broadcast").value = "";
-
-                // Abilita bottone
-                document.getElementById("check-btn").disabled = false;
-
-                // Avvia timer
-                startTimer();
-            })
-            .catch(err => {
-                console.error("Errore:", err);
-                alert("Errore nel caricamento del quiz");
+            if (!gameActive) {
+                statusDiv.style.display = "block"; // Mostra warning quando partita non attiva
+                quizContainer.style.display = "none";
+                startBtn.style.display = "none";
+                if (helpBtn) helpBtn.style.display = "flex";
+                stopTimer();
                 isPlayingQuiz = false;
-            });
-    }
 
-    function startTimer() {
-        stopTimer();
-        updateTimerDisplay();
+                // Se aveva già iniziato a giocare, resetta lo stato
+                if (currentUsername) {
+                    currentUsername = "";
+                    usernameInput.style.display = "block";
+                    usernameInput.disabled = false;
+                    usernameInput.value = "";
+                }
+            } else {
+                statusDiv.style.display = "none"; // Nascondi SEMPRE il warning se la partita è attiva
 
-        timerInterval = setInterval(() => {
-            timeLeft--;
+                if (currentUsername) {
+                    // Utente sta già giocando
+                    usernameInput.style.display = "none";
+                    startBtn.style.display = "none";
+                    quizContainer.style.display = "block";
+                    if (helpBtn) helpBtn.style.display = "none"; // Nascondi aiuto in gioco
+                } else {
+                    // Partita attiva ma utente deve ancora iniziare o inserire nome
+                    usernameInput.style.display = "block";
+                    startBtn.style.display = "block";
+                    quizContainer.style.display = "none";
+                    if (helpBtn) helpBtn.style.display = "flex";
+                }
+            }
+        }
+
+        function iniziaGioco() {
+            const username = document.getElementById("username").value.trim();
+            if (!username) {
+                alert("Inserisci il tuo nome prima di iniziare!");
+                return;
+            }
+
+            if (!gameActive) {
+                alert("La partita non è ancora iniziata! Attendi l'admin.");
+                return;
+            }
+
+            currentUsername = username;
+
+            // Nascondi campo nome e bottone inizia
+            document.getElementById("username").style.display = "none";
+            document.getElementById("start-btn").style.display = "none";
+
+            // Mostra container del quiz
+            document.getElementById("quiz-container").style.display = "block";
+
+            caricaNuovoQuiz();
+        }
+
+        function caricaNuovoQuiz() {
+            if (!gameActive) {
+                alert("La partita è terminata!");
+                return;
+            }
+
+            if (isPlayingQuiz) { // Previeni caricamento multiplo quiz
+                return; // Non caricare un nuovo quiz se ce n'è già uno in corso
+            }
+
+            isPlayingQuiz = true;
+
+            fetch(`/api/new?user=${encodeURIComponent(currentUsername)}`) // API: richiedi nuovo quiz
+                .then(r => r.json())
+                .then(j => {
+                    if (j.error) {
+                        alert(j.error);
+                        isPlayingQuiz = false;
+                        return;
+                    }
+
+                    currentQuizId = j.quizId;
+                    timeLimit = j.timeLimit || 30;
+                    timeLeft = timeLimit;
+
+                    document.getElementById("ip").textContent = j.ip;
+                    document.getElementById("mask").textContent = j.mask;
+                    document.getElementById("result").textContent = "";
+
+                    // Reset campi
+                    document.getElementById("classe").value = "";
+                    document.getElementById("rete").value = "";
+                    document.getElementById("broadcast").value = "";
+
+                    // Abilita bottone
+                    document.getElementById("check-btn").disabled = false;
+
+                    // Avvia timer
+                    startTimer();
+                })
+                .catch(err => {
+                    console.error("Errore:", err);
+                    alert("Errore nel caricamento del quiz");
+                    isPlayingQuiz = false;
+                });
+        }
+
+        function startTimer() {
+            stopTimer();
             updateTimerDisplay();
 
-            if (timeLeft <= 0) {
-                stopTimer();
-                tempoScaduto();
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+
+                if (timeLeft <= 0) { stopTimer(); tempoScaduto(); }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const timerEl = document.getElementById("timer");
+            const progressEl = document.getElementById("progress");
+            timerEl.textContent = timeLeft + "s";
+            const percentage = (timeLeft / timeLimit) * 100;
+            progressEl.style.width = percentage + "%";
+
+            if (timeLeft <= 5) {
+                timerEl.className = "timer danger";
+                progressEl.style.background = "#dc3545";
+            } else if (timeLeft <= 10) {
+                timerEl.className = "timer warning";
+                progressEl.style.background = "#ff8c00";
+            } else {
+                timerEl.className = "timer";
+                progressEl.style.background = "linear-gradient(90deg, #0d6efd, #00ff80)";
             }
-        }, 1000);
-    }
-
-    function stopTimer() {
-        if (timerInterval) {
-            clearInterval(timerInterval);
-            timerInterval = null;
         }
-    }
 
-    function updateTimerDisplay() {
-        const timerEl = document.getElementById("timer");
-        const progressEl = document.getElementById("progress");
-
-        timerEl.textContent = timeLeft + "s";
-
-        const percentage = (timeLeft / timeLimit) * 100;
-        progressEl.style.width = percentage + "%";
-
-        // Colori in base al tempo rimasto
-        if (timeLeft <= 5) {
-            timerEl.className = "timer danger";
-            progressEl.style.background = "#dc3545";
-        } else if (timeLeft <= 10) {
-            timerEl.className = "timer warning";
-            progressEl.style.background = "#ff8c00";
-        } else {
-            timerEl.className = "timer";
-            progressEl.style.background = "linear-gradient(90deg, #0d6efd, #00ff80)";
+        function stopTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
         }
-    }
 
-    function tempoScaduto() {
-        document.getElementById("check-btn").disabled = true;
-        document.getElementById("result").innerHTML = `
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle; margin-right: 6px;">
-                <circle cx="12" cy="12" r="10"></circle>
-                <polyline points="12 6 12 12 16 14"></polyline>
-            </svg>
-            Tempo scaduto!
+        function tempoScaduto() {
+            document.getElementById("check-btn").disabled = true;
+            document.getElementById("result").innerHTML = `
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle; margin-right: 6px;">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                Tempo scaduto!
+            `;
+            document.getElementById("result").style.color = "#ff8c00";
+
+            isPlayingQuiz = false;
+
+            setTimeout(() => {
+                if (gameActive) caricaNuovoQuiz();
+            }, 2000);
+        }
+
+        function controlla() {
+            const cl = document.getElementById("classe").value;
+            const net = document.getElementById("rete").value.trim();
+            const br = document.getElementById("broadcast").value.trim();
+
+            if (!cl || !net || !br) {
+                alert("Compila tutti i campi!");
+                return;
+            }
+
+            stopTimer();
+            document.getElementById("check-btn").disabled = true;
+
+            const url =
+                `/api/check?user=${encodeURIComponent(currentUsername)}&quizId=${currentQuizId}&class=${cl}&network=${net}&broadcast=${br}`;
+            // API: invia risposta
+
+            fetch(url)
+                .then(r => r.json())
+                .then(j => {
+                    if (j.error) {
+                        alert(j.error);
+                        isPlayingQuiz = false;
+                        return;
+                    }
+
+                    // Aggiorna punteggio
+                    document.getElementById("personal-score").textContent = j.score;
+
+                    if (j.timeExpired) {
+                        document.getElementById("result").innerHTML = `
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            style="vertical-align: middle; margin-right: 6px;">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        Tempo scaduto!
         `;
-        document.getElementById("result").style.color = "#ff8c00";
+                        document.getElementById("result").style.color = "#ff8c00";
+                    } else if (j.ok) {
+                        quizCount++;
+                        document.getElementById("quiz-count").textContent = quizCount;
+                        document.getElementById("result").innerHTML = `
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            style="vertical-align: middle; margin-right: 6px;">
+            <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+        Corretto! +1 punto
+        `;
+                        document.getElementById("result").style.color = "#00ff80";
+                    } else {
+                        document.getElementById("result").innerHTML = `
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            style="vertical-align: middle; margin-right: 6px;">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+        Sbagliato! Riprova nel prossimo quiz
+        `;
+                        document.getElementById("result").style.color = "#ff8080";
+                    }
 
-        isPlayingQuiz = false;
+                    isPlayingQuiz = false;
 
-        setTimeout(() => {
-            if (gameActive) caricaNuovoQuiz();
-        }, 2000);
-    }
-
-    function controlla() {
-        const cl = document.getElementById("classe").value;
-        const net = document.getElementById("rete").value.trim();
-        const br = document.getElementById("broadcast").value.trim();
-
-        if (!cl || !net || !br) {
-            alert("Compila tutti i campi!");
-            return;
+                    // Carica nuovo quiz dopo 2 secondi
+                    setTimeout(() => {
+                        if (gameActive) caricaNuovoQuiz();
+                    }, 2000);
+                })
+                .catch(err => {
+                    console.error("Errore:", err);
+                    alert("Errore nella verifica");
+                    document.getElementById("check-btn").disabled = false;
+                    isPlayingQuiz = false;
+                });
         }
 
-        stopTimer();
-        document.getElementById("check-btn").disabled = true;
-
-        const url = `/api/check?user=${encodeURIComponent(currentUsername)}&quizId=${currentQuizId}&class=${cl}&network=${net}&broadcast=${br}`;
-
-        fetch(url)
-            .then(r => r.json())
-            .then(j => {
-                if (j.error) {
-                    alert(j.error);
-                    isPlayingQuiz = false;
-                    return;
-                }
-
-                // Aggiorna punteggio
-                document.getElementById("personal-score").textContent = j.score;
-
-                if (j.timeExpired) {
-                    document.getElementById("result").innerHTML = `
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle; margin-right: 6px;">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <polyline points="12 6 12 12 16 14"></polyline>
-                        </svg>
-                        Tempo scaduto!
-                    `;
-                    document.getElementById("result").style.color = "#ff8c00";
-                } else if (j.ok) {
-                    quizCount++;
-                    document.getElementById("quiz-count").textContent = quizCount;
-                    document.getElementById("result").innerHTML = `
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align: middle; margin-right: 6px;">
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                        </svg>
-                        Corretto! +1 punto
-                    `;
-                    document.getElementById("result").style.color = "#00ff80";
-                } else {
-                    document.getElementById("result").innerHTML = `
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align: middle; margin-right: 6px;">
-                            <line x1="18" y1="6" x2="6" y2="18"></line>
-                            <line x1="6" y1="6" x2="18" y2="18"></line>
-                        </svg>
-                        Sbagliato! Riprova nel prossimo quiz
-                    `;
-                    document.getElementById("result").style.color = "#ff8080";
-                }
-
-                isPlayingQuiz = false;
-
-                // Carica nuovo quiz dopo 2 secondi
-                setTimeout(() => {
-                    if (gameActive) caricaNuovoQuiz();
-                }, 2000);
-            })
-            .catch(err => {
-                console.error("Errore:", err);
-                alert("Errore nella verifica");
-                document.getElementById("check-btn").disabled = false;
-                isPlayingQuiz = false;
-            });
-    }
-
-    checkGameStatus();
-</script>
+        checkGameStatus();
+    </script>
 </body>
+
 </html>

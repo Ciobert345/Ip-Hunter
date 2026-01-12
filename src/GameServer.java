@@ -33,6 +33,10 @@ public class GameServer {
     // Timestamp dell'ultimo reset
     public static long lastResetTimestamp = 0;
 
+    // Difficoltà corrente (easy, medium, hard)
+    public static String currentDifficulty = "easy";
+    public static String serverIp = "localhost";
+
     public static void main(String[] args) {
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
 
@@ -43,9 +47,8 @@ public class GameServer {
             String now = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
 
             // IP LOCALE
-            String localIp = "localhost";
             try {
-                localIp = InetAddress.getLocalHost().getHostAddress();
+                serverIp = InetAddress.getLocalHost().getHostAddress();
             } catch (Exception ignored) {}
 
             // BANNER STILOSO
@@ -62,8 +65,8 @@ public class GameServer {
             System.out.println("   ➤ " + gs.GREEN + "Score:  " + gs.RESET + "http://localhost:" + PORT + "/score.html");
 
             System.out.println(gs.PURPLE + " URL in LAN:" + gs.RESET);
-            System.out.println("   ➤ " + gs.YELLOW + "Client: " + gs.RESET + "http://" + localIp + ":" + PORT + "/client.html");
-            System.out.println("   ➤ " + gs.YELLOW + "Score:  " + gs.RESET + "http://" + localIp + ":" + PORT + "/score.html");
+            System.out.println("   ➤ " + gs.YELLOW + "Client: " + gs.RESET + "http://" + serverIp + ":" + PORT + "/client.html");
+            System.out.println("   ➤ " + gs.YELLOW + "Score:  " + gs.RESET + "http://" + serverIp + ":" + PORT + "/score.html");
 
             System.out.println(gs.CYAN +
                     "=====================================================\n" + gs.RESET);
@@ -197,6 +200,9 @@ public class GameServer {
                 sb.append("},\"gameActive\":").append(gameActive);
                 sb.append(",\"activeUsers\":").append(activeQuizzes.size());
                 sb.append(",\"resetTimestamp\":").append(lastResetTimestamp);
+                sb.append(",\"difficulty\":\"").append(currentDifficulty).append("\"");
+                sb.append(",\"serverIp\":\"").append(serverIp).append("\"");
+                sb.append(",\"serverPort\":").append(PORT);
                 sb.append("}");
                 sendJSON(out, sb.toString());
                 client.close();
@@ -204,8 +210,13 @@ public class GameServer {
             }
 
             // ---------- API: avvia partita (admin) ----------
-            if (path.equals("/api/admin/start")) {
+            if (path.startsWith("/api/admin/start")) {
                 gameActive = true;
+                String query = path.contains("?") ? path.split("\\?")[1] : "";
+                Map<String, String> params = parseQuery(query);
+                if (params.containsKey("difficulty")) {
+                    currentDifficulty = params.get("difficulty");
+                }
                 String json = "{\"success\":true,\"message\":\"Partita avviata!\",\"gameActive\":true}";
                 sendJSON(out, json);
                 client.close();
@@ -229,6 +240,18 @@ public class GameServer {
                 activeQuizzes.clear();
                 lastResetTimestamp = System.currentTimeMillis();
                 String json = "{\"success\":true,\"message\":\"Punteggi resettati!\",\"resetTimestamp\":" + lastResetTimestamp + "}";
+                sendJSON(out, json);
+                client.close();
+                return;
+            }
+
+            // ---------- API: cambia difficoltà (admin) ----------
+            if (path.startsWith("/api/admin/difficulty")) {
+                String query = path.contains("?") ? path.split("\\?")[1] : "";
+                Map<String, String> params = parseQuery(query);
+                String level = params.getOrDefault("level", "easy");
+                currentDifficulty = level;
+                String json = String.format("{\"success\":true,\"difficulty\":\"%s\"}", currentDifficulty);
                 sendJSON(out, json);
                 client.close();
                 return;
@@ -337,7 +360,25 @@ public class GameServer {
         String ip = (r.nextInt(223) + 1) + "." + r.nextInt(256) + "." + r.nextInt(256) + "." + r.nextInt(256);
 
         // Array di possibili subnet mask
-        String[] possibleMasks = {
+        String[] easyMasks = {
+                "255.0.0.0",       // /8
+                "255.255.0.0",     // /16
+                "255.255.255.0"    // /24
+        };
+
+        String[] mediumMasks = {
+                "255.0.0.0",       // /8
+                "255.255.0.0",     // /16
+                "255.255.255.0",   // /24
+                "255.255.255.128", // /25
+                "255.255.255.192", // /26
+                "255.255.255.224", // /27
+                "255.255.255.240", // /28
+                "255.255.255.248", // /29
+                "255.255.255.252"  // /30
+        };
+
+        String[] hardMasks = {
                 "255.0.0.0",       // /8
                 "255.128.0.0",     // /9
                 "255.192.0.0",     // /10
@@ -363,7 +404,16 @@ public class GameServer {
                 "255.255.255.252"  // /30
         };
 
-        String mask = possibleMasks[r.nextInt(possibleMasks.length)];
+        String[] masksToUse;
+        if ("hard".equalsIgnoreCase(currentDifficulty)) {
+            masksToUse = hardMasks;
+        } else if ("medium".equalsIgnoreCase(currentDifficulty)) {
+            masksToUse = mediumMasks;
+        } else {
+            masksToUse = easyMasks;
+        }
+
+        String mask = masksToUse[r.nextInt(masksToUse.length)];
         long expiryTime = System.currentTimeMillis() + (QUIZ_DURATION_SECONDS * 1000);
         String id = UUID.randomUUID().toString();
         return new QuizData(ip, mask, expiryTime, id);

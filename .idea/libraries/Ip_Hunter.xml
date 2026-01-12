@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Ip-Hunter">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/out/artifacts/Ip_game_jar/Ip-Hunter.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

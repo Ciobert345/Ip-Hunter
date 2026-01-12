@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Ip-Hunter:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Ip_Hunter_jar</output-path>
+    <root id="archive" name="Ip-Hunter.jar">
+      <element id="module-output" name="Ip-Hunter" />
+    </root>
+  </artifact>
+</component>
