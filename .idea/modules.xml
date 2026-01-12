@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Ip-Hunter.iml" filepath="$PROJECT_DIR$/Ip-Hunter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/IP-Hunter.iml" filepath="$PROJECT_DIR$/IP-Hunter.iml" />
     </modules>
   </component>
 </project>

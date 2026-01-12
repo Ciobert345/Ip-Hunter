@@ -49,4 +49,4 @@
 
 ---
 
-*Sviluppato con ❤️ per l'apprendimento del networking.*
+*Sviluppato per l'apprendimento del networking.*

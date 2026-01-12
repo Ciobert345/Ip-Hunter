@@ -61,12 +61,12 @@ public class GameServer {
             System.out.println(gs.PURPLE + " Porta: " + gs.RESET + PORT);
 
             System.out.println(gs.PURPLE + " URL disponibili:" + gs.RESET);
-            System.out.println("   ➤ " + gs.GREEN + "Client: " + gs.RESET + "http://localhost:" + PORT + "/client.html");
-            System.out.println("   ➤ " + gs.GREEN + "Score:  " + gs.RESET + "http://localhost:" + PORT + "/score.html");
+            System.out.println("   -> " + gs.GREEN + "Client: " + gs.RESET + "http://localhost:" + PORT + "/client.html");
+            System.out.println("   -> " + gs.GREEN + "Score:  " + gs.RESET + "http://localhost:" + PORT + "/score.html");
 
             System.out.println(gs.PURPLE + " URL in LAN:" + gs.RESET);
-            System.out.println("   ➤ " + gs.YELLOW + "Client: " + gs.RESET + "http://" + serverIp + ":" + PORT + "/client.html");
-            System.out.println("   ➤ " + gs.YELLOW + "Score:  " + gs.RESET + "http://" + serverIp + ":" + PORT + "/score.html");
+            System.out.println("   -> " + gs.YELLOW + "Client: " + gs.RESET + "http://" + serverIp + ":" + PORT + "/client.html");
+            System.out.println("   -> " + gs.YELLOW + "Score:  " + gs.RESET + "http://" + serverIp + ":" + PORT + "/score.html");
 
             System.out.println(gs.CYAN +
                     "=====================================================\n" + gs.RESET);
