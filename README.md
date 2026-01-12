@@ -1,4 +1,4 @@
-# 🎯 IP Hunter
+#  IP Hunter
 
 ![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
 ![Java](https://img.shields.io/badge/Java-ED8B00?style=flat&logo=java&logoColor=white)
@@ -9,18 +9,18 @@
 
 ---
 
-## ✨ Caratteristiche Principali
+##  Caratteristiche Principali
 
--   **📖 Manuale Integrato**: Una guida passo-passo accessibile direttamente in-game che spiega le classi IP, la "Formula Magica" del salto e include esempi pratici (dai livelli Medi a quelli Elite).
--   **⚡ Quiz Dinamici**: Generazione automatica di indirizzi IP e maschere con vari livelli di difficoltà.
--   **🏆 Sistema di Punteggio**: Guadagna punti per ogni risposta corretta e scala la classifica in tempo reale.
--   **⏱️ Sfida a Tempo**: Barra di progresso dinamica per aggiungere pressione e divertimento.
--   **🔌 Architettura Client-Server**: Un Admin controlla l'inizio della partita, mentre i Client si sfidano simultaneamente.
--   **📱 UI Moderna & Responsive**: Interfaccia curata, scura e professionale, ottimizzata per la leggibilità.
+-   ** Manuale Integrato**: Una guida passo-passo accessibile direttamente in-game che spiega le classi IP, la "Formula Magica" del salto e include esempi pratici (dai livelli Medi a quelli Elite).
+-   ** Quiz Dinamici**: Generazione automatica di indirizzi IP e maschere con vari livelli di difficoltà.
+-   ** Sistema di Punteggio**: Guadagna punti per ogni risposta corretta e scala la classifica in tempo reale.
+-   ** Sfida a Tempo**: Barra di progresso dinamica per aggiungere pressione e divertimento.
+-   ** Architettura Client-Server**: Un Admin controlla l'inizio della partita, mentre i Client si sfidano simultaneamente.
+-   ** UI Moderna & Responsive**: Interfaccia curata, scura e professionale, ottimizzata per la leggibilità.
 
 ---
 
-## 🚀 Come Iniziare
+##  Come Iniziare
 
 ### Admin (Server)
 1. Compila ed esegui `GameServer.java`.
@@ -33,7 +33,7 @@
 
 ---
 
-## 🛠️ Tecnologie Utilizzate
+##  Tecnologie Utilizzate
 
 -   **Backend**: Java (Standard Library) per la gestione del server HTTP e la logica dei quiz.
 -   **Frontend**: HTML5, Vanilla CSS3 (Glassmorphism, Flexbox/Grid), JavaScript moderno.
@@ -41,7 +41,7 @@
 
 ---
 
-## 🎮 Game Rules
+##  Game Rules
 1. Identifica la **Classe** dell'IP (A, B o C).
 2. Calcola l'indirizzo di **Rete** (tutti i bit host a 0).
 3. Calcola l'indirizzo di **Broadcast** (tutti i bit host a 1).
