@@ -11,12 +11,12 @@
 
 ##  Caratteristiche Principali
 
--   ** Manuale Integrato**: Una guida passo-passo accessibile direttamente in-game che spiega le classi IP, la "Formula Magica" del salto e include esempi pratici (dai livelli Medi a quelli Elite).
--   ** Quiz Dinamici**: Generazione automatica di indirizzi IP e maschere con vari livelli di difficoltà.
--   ** Sistema di Punteggio**: Guadagna punti per ogni risposta corretta e scala la classifica in tempo reale.
--   ** Sfida a Tempo**: Barra di progresso dinamica per aggiungere pressione e divertimento.
--   ** Architettura Client-Server**: Un Admin controlla l'inizio della partita, mentre i Client si sfidano simultaneamente.
--   ** UI Moderna & Responsive**: Interfaccia curata, scura e professionale, ottimizzata per la leggibilità.
+-   **Manuale Integrato**: Una guida passo-passo accessibile direttamente in-game che spiega le classi IP, la "Formula Magica" del salto e include esempi pratici (dai livelli Medi a quelli Elite).
+-   **Quiz Dinamici**: Generazione automatica di indirizzi IP e maschere con vari livelli di difficoltà.
+-   **Sistema di Punteggio**: Guadagna punti per ogni risposta corretta e scala la classifica in tempo reale.
+-   **Sfida a Tempo**: Barra di progresso dinamica per aggiungere pressione e divertimento.
+-   **Architettura Client-Server**: Un Admin controlla l'inizio della partita, mentre i Client si sfidano simultaneamente.
+-   **UI Moderna & Responsive**: Interfaccia curata, scura e professionale, ottimizzata per la leggibilità.
 
 ---
 
