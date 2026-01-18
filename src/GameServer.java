@@ -323,19 +323,30 @@ public class GameServer {
     }
 
     private static Map<String, String> parseQuery(String query) throws UnsupportedEncodingException {
-        Map<String, String> params = new HashMap<>();
-        if (query == null || query.isEmpty()) return params;
-        for (String p : query.split("&")) {
-            if (p.isEmpty()) continue;
-            String[] kv = p.split("=", 2);
-            if (kv.length == 2) {
-                params.put(kv[0], URLDecoder.decode(kv[1], "UTF-8"));
-            } else {
-                params.put(kv[0], "");
-            }
-        }
-        return params;
-    }
+		// Crea una mappa per salvare le coppie chiave=valore (es: user -> Mario)
+		Map<String, String> params = new HashMap<>();
+		
+		// Se non c'è nulla dopo il '?', restituisce la mappa vuota
+		if (query == null || query.isEmpty()) return params;
+		
+		// Divide la stringa ogni volta che trova '&' (separa i vari parametri)
+		for (String p : query.split("&")) {
+			if (p.isEmpty()) continue;
+			
+			// Divide il parametro in due parti: chiave e valore (usa '=' come separatore)
+			String[] kv = p.split("=", 2);
+			
+			if (kv.length == 2) {
+				// Decodifica i caratteri speciali (es: %20 diventa spazio) e salva nella mappa
+				params.put(kv[0], URLDecoder.decode(kv[1], "UTF-8"));
+			} else {
+				// Se c'è solo la chiave senza valore, salva una stringa vuota
+				params.put(kv[0], "");
+			}
+		}
+		
+		return params;
+	}
 
     private static void sendJSON(OutputStream out, String json) throws Exception {
         byte[] bytes = json.getBytes("UTF-8");
@@ -420,13 +431,24 @@ public class GameServer {
     }
 
     public static String getClassOfIP(String ip) {
+        String ret = "N/A"; // Valore predefinito se non rientra nelle classi A, B o C
         int first = Integer.parseInt(ip.split("\\.")[0]);
-        if (first <= 126) return "A";
-        if (first <= 191) return "B";
-        return "C";
+
+        if (first >= 1 && first <= 126) {
+            ret = "A";
+        }
+        else if (first >= 128 && first <= 191) {
+            ret = "B";
+        }
+        else if (first >= 192 && first <= 223) {
+            ret = "C";
+        }
+
+        return ret;
     }
 
     public static String getNetwork(String ip, String mask) {
+        String ret = "0.0.0.0";
         try {
             String[] ipParts = ip.split("\\.");
             String[] maskParts = mask.split("\\.");
@@ -441,50 +463,47 @@ public class GameServer {
 
             int[] network = new int[4];
             for (int i = 0; i < 4; i++) {
+                // Operazione AND bit a bit tra IP e Maschera
                 network[i] = ipInt[i] & maskInt[i];
             }
 
-            return network[0] + "." + network[1] + "." + network[2] + "." + network[3];
+            ret = network[0] + "." + network[1] + "." + network[2] + "." + network[3];
         } catch (Exception e) {
-            return "0.0.0.0";
+            // In caso di errore ret rimane "0.0.0.0"
+            System.err.println("Errore nel calcolo della rete: " + e.getMessage());
         }
+
+        return ret;
     }
 
     public static String getBroadcast(String ip, String mask) {
-        try {
-            String[] ipParts = ip.split("\\.");
-            String[] maskParts = mask.split("\\.");
+		String ret = "255.255.255.255";
+		try {
+			String[] ipParts = ip.split("\\.");
+			String[] maskParts = mask.split("\\.");
 
-            int[] ipInt = new int[4];
-            int[] maskInt = new int[4];
+			int[] ipInt = new int[4];
+			int[] maskInt = new int[4];
 
-            for (int i = 0; i < 4; i++) {
-                ipInt[i] = Integer.parseInt(ipParts[i]);
-                maskInt[i] = Integer.parseInt(maskParts[i]);
-            }
+			for (int i = 0; i < 4; i++) {
+				ipInt[i] = Integer.parseInt(ipParts[i]);
+				maskInt[i] = Integer.parseInt(maskParts[i]);
+			}
 
-            int[] broadcast = new int[4];
-            for (int i = 0; i < 4; i++) {
-                broadcast[i] = ipInt[i] | (~maskInt[i] & 0xFF);
-            }
+			int[] broadcast = new int[4];
+			for (int i = 0; i < 4; i++) {
+				// Operazione OR tra l'IP e l'inverso della maschera (NOT)
+				// L'operatore & 0xFF serve a mantenere il valore nel range 0-255
+				broadcast[i] = ipInt[i] | (~maskInt[i] & 0xFF);
+			}
 
-            return broadcast[0] + "." + broadcast[1] + "." + broadcast[2] + "." + broadcast[3];
-        } catch (Exception e) {
-            return "255.255.255.255";
-        }
-    }
+			ret = broadcast[0] + "." + broadcast[1] + "." + broadcast[2] + "." + broadcast[3];
+		} catch (Exception e) {
+			// In caso di errore, ret rimane il valore di default impostato all'inizio
+			System.err.println("Errore nel calcolo del broadcast: " + e.getMessage());
+		}
+		
+		return ret;
+	}
 
-    static class QuizData {
-        String ip;
-        String mask;
-        long expiryTime;
-        String id;
-
-        QuizData(String ip, String mask, long expiryTime, String id) {
-            this.ip = ip;
-            this.mask = mask;
-            this.expiryTime = expiryTime;
-            this.id = id;
-        }
-    }
 }
